@@ -1,6 +1,9 @@
+import NewsPost from '@/components/NewsPost'
 function Home() {
   return (
-    <div>Home</div>
+    <>
+    <NewsPost />
+    </>
   )
 }
 
