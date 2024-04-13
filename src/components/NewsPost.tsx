@@ -3,16 +3,46 @@
  * @see https://v0.dev/t/TMxJxqEvJD1
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
+import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CardContent, Card } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { SVGProps } from "react";
 import { JSX } from "react/jsx-runtime";
 import pfp from "@/placeholder.svg";
+import { createClient } from "pexels";
+import { Photo, Photos, ErrorResponse } from "pexels/dist/types";
+
+const client = createClient(
+  "mI01Hxk1iGjT35sU5qbJpfOGBRIBdZ1pcdpXEd7m5DCNlYf98MVL9142"
+);
 
 export default function NewsPost() {
+  const [photoSrcs, setPhotoSrcs] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchPhotos = async () => {
+      const photos: Photos | ErrorResponse = await client.photos.search({query: "face",per_page: 8,orientation: "square",size: "small"});
+      if ("error" in photos) {
+        console.error(photos.error);
+        setPhotoSrcs(["https://picsum.photos/200"]);
+      } else {
+        setPhotoSrcs(photos.photos.map((photo: Photo) => photo.src.medium));
+      }
+    };
+
+    fetchPhotos();
+  }, []);
+  console.log(photoSrcs);
   return (
-    <Card className="w-full flex max-w-2xl ml-auto mr-auto">
+    <Card className="w-full flex max-w-2xl mx-auto my-4">
       <CardContent className="flex flex-col gap-4 p-4">
         <div className="flex gap-4 items-start">
           <Avatar className="w-12 h-12">
@@ -44,15 +74,51 @@ export default function NewsPost() {
             careful in the area.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-2">
-          <img
-            alt="Image"
-            className="aspect-video overflow-hidden rounded-lg object-cover"
-            height="150"
-            src={pfp}
-            width="300"
-          />
-        </div>
+        <Carousel className="m-10">
+          <CarouselContent className="items-center">
+            {photoSrcs.map((src) => (
+              <CarouselItem>
+                <div className="p-1">
+                  <img
+                    alt="Image"
+                    className="mx-auto rounded-lg object-cover"
+                    src={src}
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+            {/* <CarouselItem>
+              <div className="p-1">
+                <img
+                  alt="Image"
+                  className=" rounded-lg object-cover"
+                  src={photoSrcs[0]}
+                />
+              </div>
+            </CarouselItem>
+            <CarouselItem>
+              <div className="p-1">
+                <img
+                  alt="Image"
+                  className=" rounded-lg object-cover"
+                  src=
+                />
+              </div>
+            </CarouselItem>
+            <CarouselItem>
+              <div className="p-1">
+                <img
+                  alt="Image"
+                  className=" rounded-lg object-cover"
+                  src="https://picsum.photos/200"
+                />
+              </div>
+            </CarouselItem> */}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+
         <div className="flex items-center gap-4 text-sm">
           <Button
             className="border-gray-300 dark:border-gray-700"

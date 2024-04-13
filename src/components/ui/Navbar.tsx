@@ -21,7 +21,7 @@ import {
 
 export default function Navbar() {
   return (
-    <>
+    <div className=" -z-10">
       <div className="inline-block align-middle w-48 ">
         <Link to="/">
           <Icon className="inline" />
@@ -30,7 +30,7 @@ export default function Navbar() {
       </div>
       <div className="inline-block justify-center items-center">
         <NavigationMenu>
-          <NavigationMenuList>
+          <NavigationMenuList className="gap-3">
             <NavigationMenuItem>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 <Link to="/">Home page</Link>
@@ -66,7 +66,7 @@ export default function Navbar() {
       <div className="inline-block absolute end-5">
         <ModeToggle />
       </div>
-    </>
+    </div>
   );
 }
 
