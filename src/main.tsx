@@ -5,9 +5,9 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './pages/Home'
 import Dashboard from './pages/Dashboard'
-import Complaint from './pages/Complaint.tsx'
+import ComplaintForm from './pages/Complaint.tsx'
 import About from './pages/About.tsx'
-
+import { Toaster } from "@/components/ui/toaster";
 const router = createBrowserRouter([
   {
     path: '/',
@@ -22,7 +22,7 @@ const router = createBrowserRouter([
     },
     {
       path: '/complaint',
-      element: <Complaint />
+      element: <ComplaintForm />
     },
     {
       path: '/about',
@@ -33,5 +33,6 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
+    <Toaster />
   </React.StrictMode>
 )

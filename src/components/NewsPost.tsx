@@ -87,33 +87,6 @@ export default function NewsPost() {
                 </div>
               </CarouselItem>
             ))}
-            {/* <CarouselItem>
-              <div className="p-1">
-                <img
-                  alt="Image"
-                  className=" rounded-lg object-cover"
-                  src={photoSrcs[0]}
-                />
-              </div>
-            </CarouselItem>
-            <CarouselItem>
-              <div className="p-1">
-                <img
-                  alt="Image"
-                  className=" rounded-lg object-cover"
-                  src=
-                />
-              </div>
-            </CarouselItem>
-            <CarouselItem>
-              <div className="p-1">
-                <img
-                  alt="Image"
-                  className=" rounded-lg object-cover"
-                  src="https://picsum.photos/200"
-                />
-              </div>
-            </CarouselItem> */}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />

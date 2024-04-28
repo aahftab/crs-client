@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -21,7 +19,7 @@ import {
 
 export default function Navbar() {
   return (
-    <div className=" -z-10">
+    <div className=" -z-10 flex items-center">
       <div className="inline-block align-middle w-48 ">
         <Link to="/">
           <Icon className="inline" />
