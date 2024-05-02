@@ -4,6 +4,7 @@ import * as React from "react"
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react"
 import { DayPicker } from "react-day-picker"
 
+
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
@@ -26,11 +27,11 @@ function Calendar({
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center space-x-1",
-        caption_label: "text-hidden font-medium inline-block",
+        caption: "flex justify-center pt-1 relative items-center space-x-1 ",
+        caption_label: "text-hidden font-medium inline-block hidden",
         dropdown: "appearance-none bg-transparent border-2 text-sm rounded-md p-1 pr-4 relative cursor-pointer mx-2 absolute",
         caption_dropdowns: "flex items-center",
-        vhidden: "sr-only",
+        vhidden: " sr-only",
 
         nav: "space-x-1 flex items-center",
         nav_button: cn(

@@ -29,7 +29,7 @@ export default function NewsPost() {
 
   useEffect(() => {
     const fetchPhotos = async () => {
-      const photos: Photos | ErrorResponse = await client.photos.search({query: "face",per_page: 8,orientation: "square",size: "small"});
+      const photos: Photos | ErrorResponse = await client.photos.search({query: "accident",per_page: 8,orientation: "square",size: "small"});
       if ("error" in photos) {
         console.error(photos.error);
         setPhotoSrcs(["https://picsum.photos/200"]);

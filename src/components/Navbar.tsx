@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Icon } from "@/components/icons";
 import { ModeToggle } from "@/components/mode-toggle";
-
+import UPPoliceLogo from '@/assets/UPPoliceLogo.png';
+import LoginButton from "@/components/loginButton";
 import {
   NavigationMenu,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -19,11 +19,11 @@ import {
 
 export default function Navbar() {
   return (
-    <div className=" -z-10 flex items-center">
+    <div className=" h-24 -z-10 flex  items-center w-full bg-slate-300  dark:bg-slate-700 dark:bg-opacity-50 bg-opacity-50 backdrop-blur">
       <div className="inline-block align-middle w-48 ">
         <Link to="/">
-          <Icon className="inline" />
-          <span>Hii</span>
+          <img src={ UPPoliceLogo } className="inline m-4 size-20" alt="" />
+          <span className=" text-xl font-bold ">CRS</span>
         </Link>
       </div>
       <div className="inline-block justify-center items-center">
@@ -61,6 +61,7 @@ export default function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
       </div>
+      <LoginButton />
       <div className="inline-block absolute end-5">
         <ModeToggle />
       </div>
