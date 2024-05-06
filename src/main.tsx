@@ -8,7 +8,8 @@ import Dashboard from "./pages/Dashboard";
 import ComplaintForm from "./pages/Complaint.tsx";
 import About from "./pages/About.tsx";
 import { Toaster } from "@/components/ui/toaster";
-import LoginPage from "./pages/loginPage.tsx";
+import Login from "./pages/Login.tsx";
+import Register from "./pages/Register.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,8 +34,12 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/loginPage",
-    element: <LoginPage />,
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(

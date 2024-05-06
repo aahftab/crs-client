@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -15,20 +14,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
+  uname: z.string().email(),
+  pw: z.string().min(6),
 });
 
-function LoginPage() {
+function Login() {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      uname: "",
+      pw: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof loginSchema>) {
+  async function onSubmit(data: z.infer<typeof loginSchema>) {
     toast({
       title: "You submitted the following values:",
       description: (
@@ -37,10 +36,21 @@ function LoginPage() {
         </pre>
       ),
     });
-    console.log(data);
+    console.log(JSON.stringify(data, null, 2));
+    await fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data, null, 2),
+    }).then((res) => {
+      console.log(res);
+    });
   }
 
   return (
+    <>
+    <h1 className="scroll-m-20 text-4xl text-center font-extrabold mt-[10%] tracking-tight lg:text-5xl">Login</h1>
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
@@ -48,7 +58,7 @@ function LoginPage() {
       >
         <FormField
           control={form.control}
-          name="email"
+          name="uname"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
@@ -65,7 +75,7 @@ function LoginPage() {
         />
         <FormField
           control={form.control}
-          name="password"
+          name="pw"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
@@ -84,7 +94,24 @@ function LoginPage() {
         <Button type="submit">Submit</Button>
       </form>
     </Form>
+    </>
   );
 }
 
-export default LoginPage;
+// function LoginPage() {
+//   return (
+//     <form action="http://localhost:3000/register" method="post">
+//       <div>
+//         <label htmlFor="uname">Username:</label>
+//         <input type="text" id="uname" name="uname" />
+//       </div>
+//       <div>
+//         <label htmlFor="pw">Password:</label>
+//         <input type="password" id="pw" name="pw" />
+//       </div>
+//       <button type="submit">Submit</button>
+//     </form>
+//   );
+// }
+
+export default Login;

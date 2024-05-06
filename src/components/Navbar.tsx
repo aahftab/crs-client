@@ -2,8 +2,8 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/mode-toggle";
-import UPPoliceLogo from '@/assets/UPPoliceLogo.png';
-import LoginButton from "@/components/loginButton";
+import UPPoliceLogo from "@/assets/UPPoliceLogo.png";
+import ToButton from "@/components/ToButton";
 import {
   NavigationMenu,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,7 +22,7 @@ export default function Navbar() {
     <div className=" h-24 -z-10 flex  items-center w-full bg-slate-300  dark:bg-slate-700 dark:bg-opacity-50 bg-opacity-50 backdrop-blur">
       <div className="inline-block align-middle w-48 ">
         <Link to="/">
-          <img src={ UPPoliceLogo } className="inline m-4 size-20" alt="" />
+          <img src={UPPoliceLogo} className="inline m-4 size-20" alt="" />
           <span className=" text-xl font-bold ">CRS</span>
         </Link>
       </div>
@@ -61,7 +61,10 @@ export default function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
       </div>
-      <LoginButton />
+      <div className="inline-block absolute end-20">
+        <ToButton to="login" className="inline-block mx-2 bg-blue-500 hover:bg-blue-700 text-white align-middle vertic font-bold rounded py-2 px-4"/>
+        <ToButton to="register" className="inline-block mx-2 bg-blue-500 hover:bg-blue-700 text-white align-middle vertic font-bold rounded py-2 px-4"/>
+      </div>
       <div className="inline-block absolute end-5">
         <ModeToggle />
       </div>
