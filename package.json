@@ -28,6 +28,7 @@
     "clsx": "^2.1.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.0.0",
+    "html-react-parser": "^5.1.10",
     "isomorphic-fetch": "^3.0.0",
     "lucide-react": "^0.363.0",
     "pexels": "^1.4.0",

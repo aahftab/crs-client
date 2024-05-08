@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { format } from "date-fns";
 import {
@@ -21,7 +21,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -40,9 +39,34 @@ import { CalendarIcon, Trash2 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import * as statesAndDistricts from "@/assets/states-and-districts.json";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
 
-const complaintTypes = ["burglary", "cyber_crime","theft", "fraud", "harassment", "assault", "domestic_violence", "cyber_bullying", "stalking", " defamation", "hate_speech", "child_abuse", "sexual_assault" ] as const;
+const complaintTypes = [
+  "burglary",
+  "cyber_crime",
+  "theft",
+  "fraud",
+  "harassment",
+  "assault",
+  "domestic_violence",
+  "cyber_bullying",
+  "stalking",
+  " defamation",
+  "hate_speech",
+  "child_abuse",
+  "sexual_assault",
+] as const;
+
+const suspectSchema = z.object({
+  // id: z.number(),
+  suspectName: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters." })
+    .optional(),
+  suspectAddress: z
+    .string()
+    .min(2, { message: "Address must not be empty." })
+    .optional(),
+});
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -68,17 +92,7 @@ const FormSchema = z.object({
   description: z.string().min(100, {
     message: "Description must be atleast 100 characters.",
   }),
-
-  suspectName: z
-    .string()
-    .min(2, { message: "Name must be at least 2 characters." })
-    .optional(),
-
-  suspectAddress: z
-    .string()
-    .min(2, { message: "Address must not be empty." })
-    .optional(),
-  file: z.string().optional(),
+  suspects: z.array(suspectSchema),
 });
 
 export default function ComplaintForm() {
@@ -96,12 +110,15 @@ export default function ComplaintForm() {
       district: "",
       location: "",
       description: "",
-      suspectName: "",
-      suspectAddress: "",
+      suspects: [],
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "suspects",
+  });
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
       title: "You submitted the following values:",
       description: (
@@ -110,26 +127,22 @@ export default function ComplaintForm() {
         </pre>
       ),
     });
-    console.log(data);
+    await fetch("http://localhost:3000/registerComplaint", {
+      mode: "cors",
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data, null, 2),
+    }).then((res) => {
+      console.log(res);
+    });
   }
-  type suspectType = {
-    id: number;
-    name: string|undefined;
-    address: string|undefined;
-  };
-  const states = statesAndDistricts.states;
-  const [suspects, setSuspects] = useState<suspectType[]>([]);
-  const addSuspect = () => {
-    const suspect: suspectType = {
-      id: suspects.length + 1,
-      name: form.watch("suspectName"),
-      address: form.watch("suspectAddress"),
-    };
-    setSuspects([...suspects, suspect]);
-  };
   const time = form.watch("time");
   console.log(time);
-
+  const states = statesAndDistricts.states;
+ 
   return (
     <>
       <Form {...form}>
@@ -162,7 +175,7 @@ export default function ComplaintForm() {
                 <FormItem>
                   <FormLabel>Phone no</FormLabel>
                   <FormControl>
-                    <Input placeholder="1234567890" {...field} />
+                    <Input placeholder="Enter Phone no." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -404,9 +417,8 @@ export default function ComplaintForm() {
               </FormItem>
             )}
           />
-          {suspects.length > 0 && (
+          {
             <Table>
-              <TableCaption>Suspects.</TableCaption>
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[50px] text-left">ID</TableHead>
@@ -418,87 +430,88 @@ export default function ComplaintForm() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {suspects.map((suspect) => (
-                  <TableRow key={suspect.id}>
-                    <TableCell className="text-left">{suspect.id}</TableCell>
-                    <TableCell className="font-medium">
-                      {suspect.name}
-                    </TableCell>
-                    <TableCell>{suspect.address}</TableCell>
-                    <TableCell className="text-center">
-                      <Button
-                        className="bg-white dark:bg-black"
-                        type="button"
-                        onClick={() => {
-                          setSuspects(
-                            suspects.filter((s) => s.id !== suspect.id)
-                          );
-                        }}
-                      >
-                        {" "}
-                        <Trash2 color="red"></Trash2>{" "}
-                      </Button>{" "}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {fields.length > 0 &&
+                  fields.map((item, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="text-left">{index}</TableCell>
+                      <TableCell className="font-medium">
+                        <FormField
+                          control={form.control}
+                          name={`suspects.${index}.suspectName`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Suspect Name</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter suspect name"
+                                  key={item.id}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <FormField
+                          control={form.control}
+                          name={`suspects.${index}.suspectAddress`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Suspect Address</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter suspect Address"
+                                  key={item.id}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Button
+                          type="button"
+                          variant={"destructive"}
+                          onClick={() => {
+                            remove(index);
+                          }}
+                        >
+                          {" "}
+                          <Trash2 color="white"></Trash2>{" "}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
-          )}
-          <div className="flex space-x-4">
-            <FormField
-              control={form.control}
-              name="suspectName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Suspect Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter suspect name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="suspectAddress"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Suspect Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter suspect address" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="button" className="mt-[32px]" onClick={addSuspect}>
-              Add Suspect
-            </Button>
-          </div>
-          {/* <div className="flex space-x-4">
-            <FormField
-              control={form.control}
-              name="file"
-              render={(field) => (
-                <FormItem>
-                  <FormLabel>Upload Files</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      {...field}
-                      onChange={(e) => {
-                        console.log(typeof e.target.value);
-                      }}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <Button type="button" onClick={(e) => {}}>
-              Upload
-            </Button>
-          </div> */}
+          }
 
+          <Button
+            type="button"
+            variant={"secondary"}
+            className="mt-[32px]"
+            onClick={() => {
+              append({
+                suspectName: "",
+                suspectAddress: "",
+              });
+              toast({
+                description: (
+                  <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                    <code className="text-white">
+                      {JSON.stringify(fields, null, 2)}
+                    </code>
+                  </pre>
+                ),
+              });
+            }}
+          >
+            Add Suspect
+          </Button>
           <Button type="submit">Submit</Button>
         </form>
       </Form>

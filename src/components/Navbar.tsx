@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/mode-toggle";
 import UPPoliceLogo from "@/assets/UPPoliceLogo.png";
 import ToButton from "@/components/ToButton";
@@ -16,6 +15,8 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import LogoutButton from "@/components/LogoutButton";
+import TestRoute from "./TestRoute";
 
 export default function Navbar() {
   return (
@@ -62,8 +63,10 @@ export default function Navbar() {
         </NavigationMenu>
       </div>
       <div className="inline-block absolute end-20">
-        <ToButton to="login" className="inline-block mx-2 bg-blue-500 hover:bg-blue-700 text-white align-middle vertic font-bold rounded py-2 px-4"/>
-        <ToButton to="register" className="inline-block mx-2 bg-blue-500 hover:bg-blue-700 text-white align-middle vertic font-bold rounded py-2 px-4"/>
+        <TestRoute route="/protected-route" className="inline-block mx-2"/>
+        <LogoutButton className="inline-block mx-2"/>
+        <ToButton to="login" className="inline-block mx-2"/>
+        <ToButton to="register" className="inline-block mx-2"/>
       </div>
       <div className="inline-block absolute end-5">
         <ModeToggle />
@@ -71,29 +74,29 @@ export default function Navbar() {
     </div>
   );
 }
-
-const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}
-        >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
-      </NavigationMenuLink>
-    </li>
-  );
-});
-ListItem.displayName = "ListItem";
+// import { cn } from "@/lib/utils";
+// const ListItem = React.forwardRef<
+//   React.ElementRef<"a">,
+//   React.ComponentPropsWithoutRef<"a">
+// >(({ className, title, children, ...props }, ref) => {
+//   return (
+//     <li>
+//       <NavigationMenuLink asChild>
+//         <a
+//           ref={ref}
+//           className={cn(
+//             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+//             className
+//           )}
+//           {...props}
+//         >
+//           <div className="text-sm font-medium leading-none">{title}</div>
+//           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+//             {children}
+//           </p>
+//         </a>
+//       </NavigationMenuLink>
+//     </li>
+//   );
+// });
+// ListItem.displayName = "ListItem";

@@ -18,7 +18,7 @@ const loginSchema = z.object({
   pw: z.string().min(6),
 });
 
-function Login() {
+export default function Login() {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -37,10 +37,12 @@ function Login() {
       ),
     });
     console.log(JSON.stringify(data, null, 2));
-    await fetch('http://localhost:3000/login', {
-      method: 'POST',
+    await fetch("http://localhost:3000/login", {
+      mode: "cors",
+      method: "POST",
+      credentials: "include",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data, null, 2),
     }).then((res) => {
@@ -49,69 +51,53 @@ function Login() {
   }
 
   return (
-    <>
-    <h1 className="scroll-m-20 text-4xl text-center font-extrabold mt-[10%] tracking-tight lg:text-5xl">Login</h1>
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col space-y-6 pb-12 mx-auto max-w-lg mt-20 h-full w-full px-4 sm:px-0"
-      >
-        <FormField
-          control={form.control}
-          name="uname"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter your email"
-                  className=" w-full"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="pw"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter your password"
-                  className=" w-full"
-                  type="password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
-    </>
+    <div className="flex flex-col  h-[100%]">
+      <h1 className=" w-full text-4xl text-center font-extrabold tracking-tight lg:text-5xl">
+        Login
+      </h1>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col space-y-6 pb-12 mx-auto max-w-lg mt-20 h-full w-full px-4 sm:px-0"
+        >
+          <FormField
+            control={form.control}
+            name="uname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter your email"
+                    className=" w-full"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="pw"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter your password"
+                    className=" w-full"
+                    type="password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">Submit</Button>
+        </form>
+      </Form>
+    </div>
   );
 }
-
-// function LoginPage() {
-//   return (
-//     <form action="http://localhost:3000/register" method="post">
-//       <div>
-//         <label htmlFor="uname">Username:</label>
-//         <input type="text" id="uname" name="uname" />
-//       </div>
-//       <div>
-//         <label htmlFor="pw">Password:</label>
-//         <input type="password" id="pw" name="pw" />
-//       </div>
-//       <button type="submit">Submit</button>
-//     </form>
-//   );
-// }
-
-export default Login;
