@@ -11,6 +11,8 @@ export default function LogoutButton({ className }: { className: string }) {
       },
     }).then((res) => {
       console.log(res);
+      localStorage.removeItem("isLoggedIn");
+      location.reload();
     });
   };
   return (

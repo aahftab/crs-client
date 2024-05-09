@@ -45,8 +45,8 @@ export default function Login() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data, null, 2),
-    }).then((res) => {
-      console.log(res);
+    }).then(() => {
+      localStorage.setItem("isLoggedIn", "true");
     });
   }
 
