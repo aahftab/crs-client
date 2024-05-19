@@ -5,24 +5,22 @@ import UPPoliceLogo from "@/assets/UPPoliceLogo.png";
 import ToButton from "@/components/ToButton";
 import {
   NavigationMenu,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  NavigationMenuContent,
   NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  NavigationMenuTrigger,
+
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import LogoutButton from "@/components/LogoutButton";
-import TestRoute from "./TestRoute";
 
 export default function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(!!localStorage.getItem("isLoggedIn"));
-    window.addEventListener('storage', () => {
-      setIsLoggedIn(!!localStorage.getItem("isLoggedIn"));
-    })
+  const [isLoggedIn, setIsLoggedIn] = React.useState(
+    !!localStorage.getItem("isLoggedIn")
+  );
+  window.addEventListener("storage", () => {
+    setIsLoggedIn(!!localStorage.getItem("isLoggedIn"));
+  });
   return (
     <div className=" h-24 -z-10 flex  items-center w-full bg-slate-300  dark:bg-slate-700 dark:bg-opacity-50 bg-opacity-50 backdrop-blur">
       <div className="inline-block align-middle w-48 ">
@@ -67,14 +65,23 @@ export default function Navbar() {
         </NavigationMenu>
       </div>
       <div className="inline-block absolute end-20">
-        <TestRoute route="/protected-route" className="inline-block mx-2" />
         {isLoggedIn && (
-          <LogoutButton className="inline-block mx-2" />
+          <LogoutButton className="inline-block bg-blue-500 hover:bg-blue-400" />
         )}
         {!isLoggedIn && (
           <span>
-            <ToButton to="login" className="inline-block mx-2" />
-            <ToButton to="register" className="inline-block mx-2" />
+            <ToButton
+              to="postNews"
+              className="inline-block mx-2 bg-blue-500 hover:bg-blue-400"
+            />
+            <ToButton
+              to="login"
+              className="inline-block mx-2 bg-blue-500 hover:bg-blue-400"
+            />
+            <ToButton
+              to="register"
+              className="inline-block mx-2 bg-blue-500 hover:bg-blue-400"
+            />
           </span>
         )}
       </div>

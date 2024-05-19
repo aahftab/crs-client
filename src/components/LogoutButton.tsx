@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 
 export default function LogoutButton({ className }: { className: string }) {
   const logout = async () => {
@@ -17,7 +18,7 @@ export default function LogoutButton({ className }: { className: string }) {
   };
   return (
     <Button onClick={logout} className={className}>
-      Logout
+      <LogOut className={"inline-block bg-inherit hover:bg-inherit"} />
     </Button>
   );
 }

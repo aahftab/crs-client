@@ -14,29 +14,21 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const loginSchema = z.object({
-  uname: z.string().email(),
-  pw: z.string().min(6),
+  username: z.string().email(),
+  password: z.string().min(6),
 });
 
 export default function Login() {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      uname: "",
-      pw: "",
+      username: "",
+      password: "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof loginSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-    console.log(JSON.stringify(data, null, 2));
+
     await fetch("http://localhost:3000/login", {
       mode: "cors",
       method: "POST",
@@ -45,14 +37,25 @@ export default function Login() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data, null, 2),
-    }).then(() => {
-      localStorage.setItem("isLoggedIn", "true");
-    });
+    }).then((res) => {
+      if(res.status === 401) {
+        res.json().then((res) => {
+
+          toast({
+            title: "Invalid Credentials",
+            description: res.message,
+          });
+        });
+      }
+      else {
+        localStorage.setItem("isLoggedIn", "true");
+      }
+    })
   }
 
   return (
     <div className="flex flex-col  h-[100%]">
-      <h1 className=" w-full text-4xl text-center font-extrabold tracking-tight lg:text-5xl">
+      <h1 className="mt-[10%] w-full text-4xl text-center font-extrabold tracking-tight lg:text-5xl">
         Login
       </h1>
       <Form {...form}>
@@ -62,7 +65,7 @@ export default function Login() {
         >
           <FormField
             control={form.control}
-            name="uname"
+            name="username"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
@@ -79,7 +82,7 @@ export default function Login() {
           />
           <FormField
             control={form.control}
-            name="pw"
+            name="password"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>

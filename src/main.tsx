@@ -10,6 +10,7 @@ import About from "./pages/About.tsx";
 import { Toaster } from "@/components/ui/toaster";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
+import PostNews from "./pages/PostNews.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
         element: <About />,
       },
     ],
+  },
+  {
+    path: "/postNews",
+    element: <PostNews />,
   },
   {
     path: "/login",

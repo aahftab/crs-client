@@ -14,16 +14,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const loginSchema = z.object({
-  uname: z.string().email(),
-  pw: z.string().min(6),
+  username: z.string().email(),
+  password: z.string().min(6),
 });
 
 function Register() {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      uname: "",
-      pw: "",
+      username: "",
+      password: "",
     },
   });
 
@@ -49,18 +49,18 @@ function Register() {
   }
 
   return (
-    <>
-      <h1 className="scroll-m-20 text-4xl text-center font-extrabold mt-[10%] tracking-tight lg:text-5xl">
+    <div className="flex flex-col h-[100%]">
+      <h1 className="text-4xl text-center font-extrabold mt-[10%] tracking-tight lg:text-5xl">
         Register
       </h1>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col space-y-6 pb-12 mx-auto max-w-lg mt-20 h-full w-full px-4 sm:px-0"
+          className="flex flex-col space-y-6 pb-12 mx-auto max-w-lg mt-20 h-[50%] w-full px-4 sm:px-0"
         >
           <FormField
             control={form.control}
-            name="uname"
+            name="username"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
@@ -77,7 +77,7 @@ function Register() {
           />
           <FormField
             control={form.control}
-            name="pw"
+            name="password"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>
@@ -96,7 +96,7 @@ function Register() {
           <Button type="submit">Submit</Button>
         </form>
       </Form>
-    </>
+    </div>
   );
 }
 
